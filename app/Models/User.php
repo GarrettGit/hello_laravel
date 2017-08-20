@@ -41,4 +41,16 @@ class User extends Authenticatable
       #将转码后的邮箱与链接、尺寸拼接成完整的 URL 并返回；
         return "http://www.gravatar.com/avatar/$hash?s=$size";
     }
+    /**
+     * boot 方法会在用户模型类完成初始化之后进行加载，因此我们对事件的监听需要放在该方法中。
+     * @return [type] [description]
+     */
+    public static function boot()
+    {
+        parent::boot();
+          //creating 用于监听模型被创建之前的事件
+        static::creating(function ($user) {
+            $user->activation_token = str_random(30);
+        });
+    }
 }
